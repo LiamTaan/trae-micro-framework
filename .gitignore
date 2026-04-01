@@ -6,16 +6,16 @@
 *.tar
 *.jar
 *.class
-*.pom
+!pom.xml
 *.properties
-*.xml
+!*.xml
 *.zip
 *.rar
-*.md
+!*.md
 !README.md
 !LICENSE.md
 *.txt
-*.sql
+!*.sql
 *.sh
 *.bat
 *.exe
@@ -130,7 +130,7 @@ jacoco.exec
 Dockerfile.local
 
 # Database
-*.sql
+!*.sql
 *.sql.gz
 *.sql.bak
 
