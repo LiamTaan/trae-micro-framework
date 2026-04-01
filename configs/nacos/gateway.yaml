@@ -35,6 +35,14 @@ spring:
             - Path=/api/v1/file/**
           filters:
             - StripPrefix=0
+            
+        # 统计服务路由
+        - id: stats-service
+          uri: lb://stats-service
+          predicates:
+            - Path=/api/v1/dashboard/**
+          filters:
+            - StripPrefix=0
 
         # 接口文档路由
         - id: swagger-doc
@@ -48,6 +56,14 @@ spring:
           uri: lb://auth-service
           predicates:
             - Path=/v3/api-docs/**
+          filters:
+            - StripPrefix=0
+
+        # 网关自身的 Actuator 端点
+        - id: gateway-actuator
+          uri: http://localhost:8080
+          predicates:
+            - Path=/actuator/**
           filters:
             - StripPrefix=0
 

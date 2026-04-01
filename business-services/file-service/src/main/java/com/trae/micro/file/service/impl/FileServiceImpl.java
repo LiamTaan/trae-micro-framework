@@ -160,4 +160,28 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileInfo> implement
         
         return PageResult.of(resultPage);
     }
+    
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean batchDelete(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return true;
+        }
+        
+        // 查询要删除的文件信息
+        List<FileInfo> fileInfos = baseMapper.selectBatchIds(ids);
+        
+        // 删除物理文件
+        for (FileInfo fileInfo : fileInfos) {
+            try {
+                storageStrategyFactory.getCurrentStrategy().delete(fileInfo);
+            } catch (IOException e) {
+                log.error("删除文件失败：{}", e.getMessage(), e);
+                // 物理文件删除失败不影响其他文件的删除
+            }
+        }
+        
+        // 批量删除数据库记录
+        return baseMapper.deleteBatchIds(ids) > 0;
+    }
 }

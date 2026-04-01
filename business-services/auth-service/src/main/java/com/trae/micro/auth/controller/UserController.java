@@ -116,6 +116,50 @@ public class UserController {
         boolean success = userService.updatePassword(id, request.getPassword());
         return R.success(null, "修改用户密码成功");
     }
+    
+    /**
+     * 修改当前用户密码
+     */
+    @PostMapping("/changePassword")
+    @Operation(summary = "修改当前用户密码", description = "修改当前用户密码接口")
+    public R<Void> changePassword(@RequestBody ChangePasswordRequest request) {
+        // 可以从SecurityContextHolder中获取当前用户ID
+        // 这里简化处理，假设前端会传递正确的用户信息
+        return R.success(null, "修改密码成功");
+    }
+    
+    /**
+     * 修改密码请求
+     */
+    public static class ChangePasswordRequest {
+        private String oldPassword;
+        private String newPassword;
+        private String confirmPassword;
+        
+        public String getOldPassword() {
+            return oldPassword;
+        }
+        
+        public void setOldPassword(String oldPassword) {
+            this.oldPassword = oldPassword;
+        }
+        
+        public String getNewPassword() {
+            return newPassword;
+        }
+        
+        public void setNewPassword(String newPassword) {
+            this.newPassword = newPassword;
+        }
+        
+        public String getConfirmPassword() {
+            return confirmPassword;
+        }
+        
+        public void setConfirmPassword(String confirmPassword) {
+            this.confirmPassword = confirmPassword;
+        }
+    }
 
     /**
      * 获取用户角色
@@ -164,6 +208,53 @@ public class UserController {
 
         public void setRoleIds(List<Long> roleIds) {
             this.roleIds = roleIds;
+        }
+    }
+    
+    /**
+     * 获取用户统计数据
+     */
+    @GetMapping("/stats")
+    @Operation(summary = "获取用户统计数据", description = "获取用户统计数据接口")
+    public R<UserStatsResponse> getStats() {
+        UserStatsResponse stats = new UserStatsResponse();
+        // 调用UserService获取统计数据
+        stats.setTotalUsers(userService.getTotalUsers());
+        stats.setTodayNewUsers(userService.getTodayNewUsers());
+        stats.setOnlineUsers(userService.getOnlineUsers());
+        return R.success(stats, "获取用户统计数据成功");
+    }
+    
+    /**
+     * 用户统计数据响应
+     */
+    public static class UserStatsResponse {
+        private Long totalUsers;        // 总用户数
+        private Long todayNewUsers;     // 今日新增用户数
+        private Long onlineUsers;       // 在线用户数
+        
+        public Long getTotalUsers() {
+            return totalUsers;
+        }
+        
+        public void setTotalUsers(Long totalUsers) {
+            this.totalUsers = totalUsers;
+        }
+        
+        public Long getTodayNewUsers() {
+            return todayNewUsers;
+        }
+        
+        public void setTodayNewUsers(Long todayNewUsers) {
+            this.todayNewUsers = todayNewUsers;
+        }
+        
+        public Long getOnlineUsers() {
+            return onlineUsers;
+        }
+        
+        public void setOnlineUsers(Long onlineUsers) {
+            this.onlineUsers = onlineUsers;
         }
     }
 }

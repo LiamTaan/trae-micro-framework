@@ -73,4 +73,25 @@ public interface UserService extends IService<User> {
      * @return 是否分配成功
      */
     boolean assignRoles(Long userId, List<Long> roleIds);
+    
+    /**
+     * 获取总用户数
+     *
+     * @return 总用户数
+     */
+    Long getTotalUsers();
+    
+    /**
+     * 获取今日新增用户数
+     *
+     * @return 今日新增用户数
+     */
+    Long getTodayNewUsers();
+    
+    /**
+     * 获取在线用户数
+     *
+     * @return 在线用户数
+     */
+    Long getOnlineUsers();
 }

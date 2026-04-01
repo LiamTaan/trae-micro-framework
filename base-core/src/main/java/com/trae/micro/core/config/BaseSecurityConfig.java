@@ -36,7 +36,7 @@ public abstract class BaseSecurityConfig {
             // 配置请求授权
             .authorizeHttpRequests(authz -> {
                 // 默认允许Swagger相关路径
-                authz.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
+                authz.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/actuator/**").permitAll();
                 // 子类可以重写此方法添加更多配置
                 configureAuthorizeRequests(authz);
             })

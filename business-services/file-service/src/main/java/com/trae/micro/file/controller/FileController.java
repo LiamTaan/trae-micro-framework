@@ -79,6 +79,18 @@ public class FileController {
         boolean result = fileService.delete(fileId);
         return R.success(result, "文件删除成功");
     }
+    
+    /**
+     * 批量文件删除
+     */
+    @DeleteMapping("/batch")
+    @Operation(summary = "批量文件删除", description = "批量文件删除接口")
+    public R<Boolean> batchDelete(
+            @RequestParam("ids") @Parameter(description = "文件ID列表") List<Long> ids) {
+        log.info("批量文件删除请求：{}", ids);
+        boolean result = fileService.batchDelete(ids);
+        return R.success(result, "批量删除文件成功");
+    }
 
     /**
      * 获取用户文件列表

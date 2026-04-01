@@ -65,4 +65,12 @@ public interface FileService extends IService<FileInfo> {
      * @return 分页结果
      */
     PageResult<FileInfo> page(PageQuery pageQuery);
+    
+    /**
+     * 批量删除文件
+     *
+     * @param ids 文件ID列表
+     * @return 是否删除成功
+     */
+    boolean batchDelete(List<Long> ids);
 }

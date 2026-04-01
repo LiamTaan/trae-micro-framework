@@ -9,6 +9,7 @@ import com.trae.micro.auth.model.User;
 import com.trae.micro.auth.service.UserService;
 import com.trae.micro.core.model.PageResult;
 import com.trae.micro.core.security.TenantContextHolder;
+import com.trae.micro.core.service.RedisService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,11 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     private final PasswordEncoder passwordEncoder;
+    private final RedisService redisService;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, RedisService redisService) {
         this.passwordEncoder = passwordEncoder;
+        this.redisService = redisService;
     }
 
     @Override
@@ -139,5 +142,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         
         return true;
+    }
+    
+    @Override
+    public Long getTotalUsers() {
+        // 获取总用户数
+        return this.count();
+    }
+    
+    @Override
+    public Long getTodayNewUsers() {
+        // 获取今日新增用户数
+        LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.ge(User::getCreateTime, today);
+        return this.count(queryWrapper);
+    }
+    
+    @Override
+    public Long getOnlineUsers() {
+        // 从Redis获取在线用户数
+        return redisService.getOnlineUserCount();
     }
 }

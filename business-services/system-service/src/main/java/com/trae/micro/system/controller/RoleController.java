@@ -72,6 +72,16 @@ public class RoleController {
         boolean success = roleService.removeById(id);
         return R.success(null, "删除角色成功");
     }
+    
+    /**
+     * 批量删除角色
+     */
+    @DeleteMapping("/batch")
+    @Operation(summary = "批量删除角色", description = "批量删除角色接口")
+    public R<Void> batchDelete(@RequestParam(name = "ids") List<Long> ids) {
+        boolean success = roleService.removeByIds(ids);
+        return R.success(null, "批量删除角色成功");
+    }
 
     /**
      * 获取角色菜单ID列表

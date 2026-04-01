@@ -12,6 +12,8 @@
 *.zip
 *.rar
 *.md
+!README.md
+!LICENSE.md
 *.txt
 *.sql
 *.sh
@@ -49,11 +51,11 @@ Thumbs.db
 *~
 
 # Build
-/target/
-/build/
-/dist/
-/out/
-/bin/
+target/
+build/
+dist/
+out/
+bin/
 
 # Environment
 .env
