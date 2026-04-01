@@ -1,0 +1,152 @@
+# Maven
+*.log
+*.war
+*.ear
+*.tar.gz
+*.tar
+*.jar
+*.class
+*.pom
+*.properties
+*.xml
+*.zip
+*.rar
+*.md
+*.txt
+*.sql
+*.sh
+*.bat
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.o
+*.obj
+*.out
+*.pid
+*.seed
+*.pid.lock
+*.swp
+*.swo
+*~
+.DS_Store
+.TRASH*
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.idea/
+.gradle/
+*.iml
+*.ipr
+*.iws
+*.swp
+*.swo
+*~
+
+# Build
+/target/
+/build/
+/dist/
+/out/
+/bin/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven
+.mvn/
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Maven
+.target/
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+.mvn/
+
+# OS
+.DS_Store
+Thumbs.db
+*.bak
+*.tmp
+*.temp
+
+# Logs
+logs/
+*.log
+*.trace
+
+# Config
+application-*.properties
+application-*.yml
+bootstrap-*.properties
+bootstrap-*.yml
+
+# Test
+coverage/
+jacoco.exec
+*.exec
+*.ec
+
+# Docker
+.docker/
+Dockerfile.local
+
+# Database
+*.sql
+*.sql.gz
+*.sql.bak
+
+# Other
+*.pid
+*.seed
+*.pid.lock
+*.local
+.env
+.env.local
+.env.*.local
+
+# IDE plugins
+*.ser
+*.class
+
+# Temporary files
+*.cache
+.cache/
+.temp/
+.tmp/

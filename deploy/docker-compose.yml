@@ -1,0 +1,152 @@
+version: '3.8'
+
+services:
+  # MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: trae-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: trae_micro_framework
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ../docs/sql-scripts/create_tables.sql:/docker-entrypoint-initdb.d/1_create_tables.sql
+      - ../docs/sql-scripts/init_data.sql:/docker-entrypoint-initdb.d/2_init_data.sql
+    restart: always
+
+  # Redis 缓存
+  redis:
+    image: redis:6.0
+    container_name: trae-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: always
+
+  # Nacos 注册/配置中心
+  nacos:
+    image: nacos/nacos-server:v2.0.3
+    container_name: trae-nacos
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=mysql
+      - MYSQL_SERVICE_DB_NAME=nacos_config
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=root
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    depends_on:
+      - mysql
+    restart: always
+
+  # 认证服务
+  auth-service:
+    build:
+      context: ../business-services/auth-service
+      dockerfile: Dockerfile
+    container_name: trae-auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      - NACOS_ADDR=nacos:8848
+      - NACOS_NAMESPACE=public
+      - NACOS_GROUP=DEFAULT_GROUP
+      - MYSQL_URL=jdbc:mysql://mysql:3306/trae_micro_framework?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=Asia/Shanghai
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=root
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+    depends_on:
+      - nacos
+      - mysql
+      - redis
+    restart: always
+
+  # 系统服务
+  system-service:
+    build:
+      context: ../business-services/system-service
+      dockerfile: Dockerfile
+    container_name: trae-system-service
+    ports:
+      - "8082:8082"
+    environment:
+      - NACOS_ADDR=nacos:8848
+      - NACOS_NAMESPACE=public
+      - NACOS_GROUP=DEFAULT_GROUP
+      - MYSQL_URL=jdbc:mysql://mysql:3306/trae_micro_framework?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=Asia/Shanghai
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=root
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+    depends_on:
+      - nacos
+      - mysql
+      - redis
+    restart: always
+
+  # 文件服务
+  file-service:
+    build:
+      context: ../business-services/file-service
+      dockerfile: Dockerfile
+    container_name: trae-file-service
+    ports:
+      - "8083:8083"
+    environment:
+      - NACOS_ADDR=nacos:8848
+      - NACOS_NAMESPACE=public
+      - NACOS_GROUP=DEFAULT_GROUP
+      - MYSQL_URL=jdbc:mysql://mysql:3306/trae_micro_framework?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=Asia/Shanghai
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=root
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - FILE_UPLOAD_PATH=/app/uploads
+    volumes:
+      - file-upload:/app/uploads
+    depends_on:
+      - nacos
+      - mysql
+      - redis
+    restart: always
+
+  # 网关服务
+  gateway:
+    build:
+      context: ../gateway
+      dockerfile: Dockerfile
+    container_name: trae-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - NACOS_ADDR=nacos:8848
+      - NACOS_NAMESPACE=public
+      - NACOS_GROUP=DEFAULT_GROUP
+      - JWT_SECRET=trae-micro-framework-jwt-key-random-strong-secure-key
+    depends_on:
+      - nacos
+      - auth-service
+      - system-service
+      - file-service
+    restart: always
+
+volumes:
+  mysql-data:
+    driver: local
+  redis-data:
+    driver: local
+  file-upload:
+    driver: local

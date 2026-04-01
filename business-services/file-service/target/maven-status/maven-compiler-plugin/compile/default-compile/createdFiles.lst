@@ -1,0 +1,11 @@
+com\trae\micro\file\strategy\impl\OssStorageStrategy.class
+com\trae\micro\file\model\FileInfo.class
+com\trae\micro\file\strategy\impl\LocalStorageStrategy.class
+com\trae\micro\file\config\SecurityConfig.class
+com\trae\micro\file\mapper\FileMapper.class
+com\trae\micro\file\FileServiceApplication.class
+com\trae\micro\file\strategy\StorageStrategy.class
+com\trae\micro\file\service\impl\FileServiceImpl.class
+com\trae\micro\file\strategy\StorageStrategyFactory.class
+com\trae\micro\file\controller\FileController.class
+com\trae\micro\file\service\FileService.class

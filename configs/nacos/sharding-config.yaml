@@ -1,0 +1,62 @@
+# ShardingSphere分库分表配置
+spring:
+  shardingsphere:
+    datasource:
+      names: ds_0, ds_1, ds_2  # 数据源名称
+      ds_0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/trae_micro_framework_0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+        username: root
+        password: 123456
+      ds_1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/trae_micro_framework_1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+        username: root
+        password: 123456
+      ds_2:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/trae_micro_framework_2?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+        username: root
+        password: 123456
+    rules:
+      sharding:
+        tables:
+          sys_user:  # 用户表分表配置
+            actual-data-nodes: ds_${0..2}.sys_user_${0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: user-table-inline
+            database-strategy:
+              standard:
+                sharding-column: tenant_id
+                sharding-algorithm-name: database-inline
+          sys_order:  # 订单表分表配置
+            actual-data-nodes: ds_${0..2}.sys_order_${0..3}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: order-table-inline
+            database-strategy:
+              standard:
+                sharding-column: tenant_id
+                sharding-algorithm-name: database-inline
+        sharding-algorithms:
+          database-inline:  # 数据库分片算法
+            type: INLINE
+            props:
+              algorithm-expression: ds_${tenant_id % 3}
+          user-table-inline:  # 用户表分片算法
+            type: INLINE
+            props:
+              algorithm-expression: sys_user_${id % 2}
+          order-table-inline:  # 订单表分片算法
+            type: INLINE
+            props:
+              algorithm-expression: sys_order_${id % 4}
+    props:
+      sql-show: true  # 显示SQL
+      check-table-metadata-enabled: false  # 关闭表元数据检查

@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    import:
+      - optional:nacos:common-config.yaml
+      - optional:nacos:gateway.yaml
+# 日志配置
+logging:
+  level:
+    org.springframework.cloud.gateway: debug

@@ -1,0 +1,54 @@
+# 通用配置
+spring:
+  profiles:
+    active: dev
+  output:
+    ansi:
+      enabled: always
+  cloud:
+    sentinel:
+      transport:
+        dashboard: ${SENTINEL_DASHBOARD:localhost:8080}
+        port: 8719
+    loadbalancer:
+      nacos:
+        enabled: true
+  
+  # Actuator配置
+  actuator:
+    endpoints:
+      web:
+        exposure:
+          include: '*'
+    endpoint:
+      health:
+        show-details: always
+      metrics:
+        enabled: true
+      prometheus:
+        enabled: true
+    metrics:
+      export:
+        prometheus:
+          enabled: true
+        enabled: true
+      tags:
+        application: ${spring.application.name}
+
+# 日志配置
+logging:
+  level:
+    root: info
+    com.trae.micro: debug
+  pattern:
+    console: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx'
+
+# JWT配置
+jwt:
+  secret: trae-micro-framework-jwt-key-random-strong-secure-key
+  expire: 3600000
+# 服务间Token配置
+service:
+  token:
+    secret: trae-micro-framework-jwt-key-feign-strong-secure-key
+    expire: 3600000

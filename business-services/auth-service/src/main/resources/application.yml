@@ -1,0 +1,15 @@
+server:
+  port: 8081
+
+spring:
+  config:
+    import:
+      - optional:nacos:common-config.yaml
+      - optional:nacos:auth-service.yaml
+      - optional:nacos:mysql-service.yaml
+      - optional:nacos:redis-service.yaml
+
+# 日志配置
+logging:
+  level:
+    com.trae.micro: debug

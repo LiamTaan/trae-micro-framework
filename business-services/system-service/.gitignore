@@ -1,0 +1,20 @@
+# Maven
+/target/
+/.mvn/
+
+# IDE
+/.idea/
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+*.swp
+*.swo
+*.log
+
+# Environment
+.env
+.env.local
+.env.*.local
